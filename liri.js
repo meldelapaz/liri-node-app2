@@ -1,13 +1,13 @@
-//VARIABLES
+//VARIABLES---------------------------------
 var keysjs 	= require("./keys.js");
 var request = require("request");
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
 var command = process.argv[2];
-var userType = '';
+var userSearch = '';
 
 
-//COMMANDS (switch statements)
+//COMMANDS (switch statements)-------------------
 
 switch(command) {
     case "my-tweets":
@@ -18,16 +18,16 @@ switch(command) {
     	omdbfun();
     break;
 
-    // case "spotify-this-song":
-    // 	spotifyfun();
-    // break;
+    case "spotify-this-song":
+    	spotifyfun();
+    break;
 
     //default:
     	//console.log("Please enter a command")
 }
 
 
-//FUNCTIONS
+//FUNCTIONS ---------------------------------------
 
 function twitterfun() {
 		 
@@ -61,26 +61,44 @@ function omdbfun() {
 
 	    // Parse the body of the site and recover just the imdbRating
 	    // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
-	    console.log("The movie's rating is: " + JSON.parse(body).imdbRating);
+	    //console.log(JSON.parse(body))
+	    console.log("Movie Title: " + JSON.parse(body).Title);
+	    console.log("Movie Year: " + JSON.parse(body).Year);
+	    console.log("Rated: " + JSON.parse(body).Rated);
+	    console.log("imbd Rating: " + JSON.parse(body).imdbRating);
+	    console.log("Produced in: " + JSON.parse(body).Country);
+	    console.log("Language: " + JSON.parse(body).Language);
+	    console.log("Movie Plot: " + JSON.parse(body).Plot);
+	    console.log("Actors: " + JSON.parse(body).Actors);
+	    console.log("Rotten Tomatoes: " + JSON.parse(body).Ratings[1].Value);
 	  }
 	});
 
 }
 
 
-function spotify() {
-	
-	var spotify = new Spotify({
-	  id: <your spotify client id>,
-	  secret: <your spotify client secret>
-	});
+function spotifyfun(song) {
+
+	var spotify = new Spotify(
+	  keysjs.spotifyKeys
+	);
 	 
-	spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
+	spotify.search({ type: 'track', query: 'All the Small Things', limit: 1 }, function(err, data) {
 	  if (err) {
 	    return console.log('Error occurred: ' + err);
 	  }
-	 
-	console.log(data); 
+	
+	for (var i = 0; i<data.tracks.items.length; i++) {
+		//console.log(data.tracks.items[0])
+		var songData = data.tracks.items[0]
+	  	console.log('Song Name: ' + songData.name)
+	  	console.log('Artist(s): ' + songData.album.artists[0].name)
+	  	console.log('Song URL: ' + songData.external_urls.spotify)
+	  	console.log('Album Name: ' + songData.album.name)
+	}
+
+	//console.log(data.tracks.items[i])
+	//console.log(data.tracks.items[0]); 
 	});
 
 }
