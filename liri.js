@@ -55,7 +55,7 @@ var fs = require('fs');
 	    break;
 
 	    default:
-	    	console.log("Please use one of the following commands: my-tweets, this-movie, spotify-this-song, do-what-it-says")
+	    	console.log("Please use one of the following commands: my-tweets, this-movie, spotify-this-song, do-what-it-says, random-joke")
 	} 
 
 // } else {
@@ -167,6 +167,8 @@ function doWhatItSays() {
 
 	});
 }
+
+
 
 function funnyjoke() {
 	var oneLinerJoke = require('one-liner-joke');
