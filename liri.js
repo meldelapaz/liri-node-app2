@@ -107,7 +107,7 @@ function omdbfun() {
 }
 
 
-function spotifyfun() {
+function spotifyfun(userSearch) {
 
 	var spotify = new Spotify(
 	  keysjs.spotifyKeys
