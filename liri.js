@@ -14,44 +14,54 @@ var fs = require('fs');
 // inquirer.prompt([
   
 //   {
-//     type: "input",
-//     message: "What is your name?",
-//     name: "name",
+//     type: "confirm",
+//     message: "Would you like to begin?",
+//     name: "confirm",
+//     default: true
 //   }
-
 //COMMANDS (switch statements)-------------------
 
 //]).then(function(user) {
 
-switch(command) {
-    case "my-tweets":
-        twitterfun();
-    break;
+// if (user.confirm) {
 
-    case "this-movie":
-    	if (userSearch === undefined){
-    		userSearch = "The Grinch"
-    	} else {
-    	omdbfun();
-    	}
-    break;
+	switch(command) {
+	    case "my-tweets":
+	        twitterfun();
+	    break;
 
-    case "spotify-this-song":
-    	if (userSearch === undefined){
-    		userSearch = "The Sign"
-    	} else {
-    	spotifyfun();
-    	}
-    break;
+	    case "this-movie":
+	    	if (userSearch === undefined){
+	    		userSearch = "The Grinch"
+	    	} else {
+	    	omdbfun();
+	    	}
+	    break;
 
-    case "do-what-it-says":
-    	doWhatItSays();
-    break;
+	    case "spotify-this-song":
+	    	if (userSearch === undefined){
+	    		userSearch = "The Sign"
+	    	} else {
+	    	spotifyfun();
+	    	}
+	    break;
 
-    default:
-    	console.log("Please use one of the following commands: my-tweets, this-movie, spotify-this-song, do-what-it-says")
+	    case "do-what-it-says":
+	    	doWhatItSays();
+	    break;
 
-}
+	    case "random-joke":
+	    	funnyjoke();
+	    break;
+
+	    default:
+	    	console.log("Please use one of the following commands: my-tweets, this-movie, spotify-this-song, do-what-it-says")
+	} 
+
+// } else {
+// 	console.log("suit yourself...try again when you're ready")
+
+// }
 //});
 
 
@@ -156,7 +166,17 @@ function doWhatItSays() {
 	  spotifyfun(dataArr[1]);
 
 	});
+}
 
+function funnyjoke() {
+	var oneLinerJoke = require('one-liner-joke');
+ 
+	/*
+	The variable getRandomJoke will contain a random joke with a format:
+	{"body":"Artificial intelligence is no match for natural stupidity.","tags":["intelligence","stupid"]}
+	*/
+	var getRandomJoke = oneLinerJoke.getRandomJoke().body;
+	console.log(getRandomJoke);
 }
 
 
