@@ -4,6 +4,7 @@ var request = require("request");
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
 var inquirer = require('inquirer');
+var oneLinerJoke = require('one-liner-joke');
 var command = process.argv[2];
 var userSearch = process.argv[3];
 var fs = require('fs');
@@ -33,6 +34,7 @@ var fs = require('fs');
 	    case "this-movie":
 	    	if (userSearch === undefined){
 	    		userSearch = "The Grinch"
+	    		omdbfun()
 	    	} else {
 	    	omdbfun();
 	    	}
@@ -40,7 +42,8 @@ var fs = require('fs');
 
 	    case "spotify-this-song":
 	    	if (userSearch === undefined){
-	    		userSearch = "The Sign"
+	    		userSearch = "The Sign by Ace of Ace of Base"
+	    		spotifyfun(userSearch)
 	    	} else {
 	    	spotifyfun();
 	    	}
@@ -171,7 +174,6 @@ function doWhatItSays() {
 
 
 function funnyjoke() {
-	var oneLinerJoke = require('one-liner-joke');
  
 	/*
 	The variable getRandomJoke will contain a random joke with a format:
