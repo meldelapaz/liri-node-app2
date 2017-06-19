@@ -3,11 +3,25 @@ var keysjs 	= require("./keys.js");
 var request = require("request");
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
+var inquirer = require('inquirer');
 var command = process.argv[2];
-var userSearch = '';
+var userSearch = process.argv[3];
+var fs = require('fs');
 
+
+//INQUIRER -------------- currently isn't working the way I want it to
+
+// inquirer.prompt([
+  
+//   {
+//     type: "input",
+//     message: "What is your name?",
+//     name: "name",
+//   }
 
 //COMMANDS (switch statements)-------------------
+
+//]).then(function(user) {
 
 switch(command) {
     case "my-tweets":
@@ -15,16 +29,30 @@ switch(command) {
     break;
 
     case "this-movie":
+    	if (userSearch === undefined){
+    		userSearch = "The Grinch"
+    	} else {
     	omdbfun();
+    	}
     break;
 
     case "spotify-this-song":
+    	if (userSearch === undefined){
+    		userSearch = "The Sign"
+    	} else {
     	spotifyfun();
+    	}
     break;
 
-    //default:
-    	//console.log("Please enter a command")
+    case "do-what-it-says":
+    	doWhatItSays();
+    break;
+
+    default:
+    	console.log("Please use one of the following commands: my-tweets, this-movie, spotify-this-song, do-what-it-says")
+
 }
+//});
 
 
 //FUNCTIONS ---------------------------------------
@@ -54,7 +82,7 @@ function twitterfun() {
 function omdbfun() {
 
 	// Then run a request to the OMDB API with the movie specified
-	request("http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=40e9cece", function(error, response, body) {
+	request("http://www.omdbapi.com/?t=" + userSearch + "&y=&plot=short&apikey=40e9cece", function(error, response, body) {
 
 	  // If the request is successful (i.e. if the response status code is 200)
 	  if (!error && response.statusCode === 200) {
@@ -70,20 +98,22 @@ function omdbfun() {
 	    console.log("Language: " + JSON.parse(body).Language);
 	    console.log("Movie Plot: " + JSON.parse(body).Plot);
 	    console.log("Actors: " + JSON.parse(body).Actors);
+	    //a TypeError occurs when there is no rotten tomatoes value for the search
 	    console.log("Rotten Tomatoes: " + JSON.parse(body).Ratings[1].Value);
+
 	  }
 	});
 
 }
 
 
-function spotifyfun(song) {
+function spotifyfun() {
 
 	var spotify = new Spotify(
 	  keysjs.spotifyKeys
 	);
 	 
-	spotify.search({ type: 'track', query: 'All the Small Things', limit: 1 }, function(err, data) {
+	spotify.search({ type: 'track', query: userSearch, limit: 1 }, function(err, data) {
 	  if (err) {
 	    return console.log('Error occurred: ' + err);
 	  }
@@ -100,7 +130,37 @@ function spotifyfun(song) {
 	//console.log(data.tracks.items[i])
 	//console.log(data.tracks.items[0]); 
 	});
+}
+
+function doWhatItSays() {
+
+	// This block of code will read from the "movies.txt" file.
+	// It's important to include the "utf8" parameter or the code will provide stream data (garbage)
+	// The code will store the contents of the reading inside the variable "data"
+	fs.readFile("random.txt", "utf8", function(error, data) {
+	//fs.readFile('/etc/passwd', (err, data) => {
+
+	  // If the code experiences any errors it will log the error to the console.
+	  if (error) {
+	    return console.log(error);
+	  }
+
+	  // We will then print the contents of data
+	  console.log(data);
+
+	  // Then split it by commas (to make it more readable)
+	  var dataArr = data.split(",");
+
+	  // We will then re-display the content as an array for later use.
+	  //console.log(dataArr);
+	  spotifyfun(dataArr[1]);
+
+	});
 
 }
+
+
+
+
 
 
